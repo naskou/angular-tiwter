@@ -1,11 +1,11 @@
+import { StreamsComponent } from '../components/streams/streams.component';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { AuthTabsComponent } from '../components/auth-tabs/auth-tabs.component';
 
 const routes: Routes = [
   {
-    path: '',
-    component: AuthTabsComponent
+    path: 'streams',
+    component: StreamsComponent
   }
 ];
 
@@ -13,4 +13,4 @@ const routes: Routes = [
   exports: [RouterModule],
   imports: [RouterModule.forRoot(routes)]
 })
-export class AuthRoutingModule { }
+export class StreamsRoutingModule { }
