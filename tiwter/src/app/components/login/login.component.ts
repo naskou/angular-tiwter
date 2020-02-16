@@ -1,3 +1,4 @@
+import { TokenService } from './../../services/token.service';
 import { AuthService } from './../../services/auth.service';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
@@ -11,9 +12,14 @@ import { Router } from '@angular/router';
 export class LoginComponent implements OnInit {
   loginForm: FormGroup;
   errorMessage: string;
-  showSpinner: false;
+  showSpinner: boolean;
 
-  constructor(private fb: FormBuilder, private authService: AuthService, private router: Router) {}
+  constructor(
+    private fb: FormBuilder,
+    private authService: AuthService,
+    private router: Router,
+    private tokenService: TokenService
+  ) {}
 
   ngOnInit() {
     this.init();
@@ -30,6 +36,7 @@ export class LoginComponent implements OnInit {
     this.showSpinner = true;
     this.authService.loginUser(this.loginForm.value).subscribe(
       data => {
+        this.tokenService.SetToken(data.token);
         this.loginForm.reset();
         setTimeout(() => {
           this.router.navigate(['streams']);
