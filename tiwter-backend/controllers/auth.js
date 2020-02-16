@@ -96,7 +96,7 @@ module.exports = {
               .json({ message: 'Password is incorrect.' });
           }
           const token = jwt.sign({ data: user }, dbConfig.secret, {
-            expiresIn: "1h"
+            expiresIn: '1h'
           });
           res.cookie('auth', token);
           return res

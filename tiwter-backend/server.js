@@ -40,8 +40,10 @@ mongoose.connect(dbConfig.url, {
 });
 
 const auth = require('./routes/authRoutes');
+const posts = require('./routes/postRoutes');
 
 app.use('/api/tiwter', auth);
+app.use('/api/tiwter', posts);
 
 app.listen(3000, () => {
   console.log('Running on port 3000');
