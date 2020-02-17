@@ -8,10 +8,13 @@ const BASEURL = 'http://localhost:3000/api/tiwter';
   providedIn: 'root'
 })
 export class PostService {
-
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   addpost(body): Observable<any> {
     return this.http.post(`${BASEURL}/post/add-post`, body);
+  }
+
+  getAllPosts(): Observable<any> {
+    return this.http.get(`${BASEURL}/posts`);
   }
 }
