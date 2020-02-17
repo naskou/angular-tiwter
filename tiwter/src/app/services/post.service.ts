@@ -10,11 +10,15 @@ const BASEURL = 'http://localhost:3000/api/tiwter';
 export class PostService {
   constructor(private http: HttpClient) {}
 
-  addpost(body): Observable<any> {
+  addPost(body): Observable<any> {
     return this.http.post(`${BASEURL}/post/add-post`, body);
   }
 
   getAllPosts(): Observable<any> {
     return this.http.get(`${BASEURL}/posts`);
+  }
+
+  addLike(body): Observable<any> {
+    return this.http.post(`${BASEURL}/post/add-like`, body);
   }
 }

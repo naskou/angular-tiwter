@@ -12,7 +12,7 @@ module.exports = {
     const schema = Joi.object().keys({
       username: Joi.string()
         .min(5)
-        .max(10)
+        .max(15)
         .required(),
       email: Joi.string()
         .email()
