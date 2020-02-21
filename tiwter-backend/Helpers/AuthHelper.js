@@ -20,7 +20,7 @@ module.exports = {
 
     return jwt.verify(token, dbConfig.secret, (err, decoded) => {
       if (err) {
-        if (err.exporedAt < new Date()) {
+        if (err.expiredAt < new Date()) {
           return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
             message: 'Token has expired. Please login again',
             token: null
