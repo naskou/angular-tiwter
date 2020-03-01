@@ -5,6 +5,8 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { AuthGuard } from '../services/auth.guard';
 import { FollowingComponent } from '../components/following/following.component';
+import { FollowersComponent } from '../components/followers/followers.component';
+import { NotificationsComponent } from '../components/notifications/notifications.component';
 
 const routes: Routes = [
   {
@@ -25,6 +27,16 @@ const routes: Routes = [
   {
     path: 'people/following',
     component: FollowingComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'people/followers',
+    component: FollowersComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'notifications',
+    component: NotificationsComponent,
     canActivate: [AuthGuard]
   }
 ];

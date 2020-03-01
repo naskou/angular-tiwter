@@ -4,12 +4,12 @@ import { UsersService } from 'src/app/services/users.service';
 import io from 'socket.io-client';
 
 @Component({
-  selector: 'app-following',
-  templateUrl: './following.component.html',
-  styleUrls: ['./following.component.scss']
+  selector: 'app-followers',
+  templateUrl: './followers.component.html',
+  styleUrls: ['./followers.component.scss']
 })
-export class FollowingComponent implements OnInit {
-  following = [];
+export class FollowersComponent implements OnInit {
+  followers = [];
   user: any;
 
   socket: any;
@@ -23,21 +23,13 @@ export class FollowingComponent implements OnInit {
     this.GetUser();
     this.socket.on('refreshPage', () => {
       this.GetUser();
-    });
+    })
   }
 
   GetUser() {
-    this.usersService.GetUserById(this.user._id).subscribe(
-      data => {
-        this.following = data.result.following;
-      },
-      err => {}
-    );
-  }
-
-  UnFollowUser(user) {
-    this.usersService.UnFollowUser(user._id).subscribe(data => {
-      this.socket.emit('refresh', {}); 
-    });
+    this.usersService.GetUserById(this.user._id).subscribe(data => {
+      this.followers = data.result.followers;
+    },
+    err => console.log(err))
   }
 }

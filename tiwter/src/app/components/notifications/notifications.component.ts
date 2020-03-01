@@ -4,15 +4,15 @@ import { UsersService } from 'src/app/services/users.service';
 import io from 'socket.io-client';
 
 @Component({
-  selector: 'app-following',
-  templateUrl: './following.component.html',
-  styleUrls: ['./following.component.scss']
+  selector: 'app-notifications',
+  templateUrl: './notifications.component.html',
+  styleUrls: ['./notifications.component.scss']
 })
-export class FollowingComponent implements OnInit {
-  following = [];
-  user: any;
-
+export class NotificationsComponent implements OnInit {
   socket: any;
+
+  user: any;
+  notifications = [];
 
   constructor(private tokenService: TokenService, private usersService: UsersService) {
     this.socket = io('http://localhost:3000');
@@ -27,17 +27,8 @@ export class FollowingComponent implements OnInit {
   }
 
   GetUser() {
-    this.usersService.GetUserById(this.user._id).subscribe(
-      data => {
-        this.following = data.result.following;
-      },
-      err => {}
-    );
-  }
-
-  UnFollowUser(user) {
-    this.usersService.UnFollowUser(user._id).subscribe(data => {
-      this.socket.emit('refresh', {}); 
+    this.usersService.GetUserById(this.user._id).subscribe(data => {
+      this.notifications = data.result.notifications;
     });
   }
 }
