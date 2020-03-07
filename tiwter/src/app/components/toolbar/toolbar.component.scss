@@ -56,12 +56,12 @@ img {
 }
 
 .markAll {
-    color: #64b5f6;
-    background: inherit !important;
+    color: #fff;
+    background: #64b5f6 !important;
 }
 
 .material-icons {
-    color: #fff !important
+    color: #fff !important;
 }
 
 .dropdown-content {
@@ -70,4 +70,14 @@ img {
     img {
         border: solid 2px #96c7f8;
     }
+}
+
+.badge {
+    min-width: 10px !important;
+    color: #fff;
+    background-color: red !important;
+    border-radius: 50% !important;
+    height: 25px;
+    margin-top: -53px;
+    margin-left: 18px;
 }
