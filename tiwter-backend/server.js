@@ -43,16 +43,19 @@ mongoose.connect(dbConfig.url, {
 });
 
 require('./socket/streams')(io);
+require('./socket/private')(io);
 
 const auth = require('./routes/authRoutes');
 const posts = require('./routes/postRoutes');
 const users = require('./routes/userRoutes');
 const friends = require('./routes/friendsRoutes');
+const message = require('./routes/messageRoutes');
 
 app.use('/api/tiwter', auth);
 app.use('/api/tiwter', posts);
 app.use('/api/tiwter', users);
 app.use('/api/tiwter', friends);
+app.use('/api/tiwter', message);
 
 
 server.listen(3000, () => {
