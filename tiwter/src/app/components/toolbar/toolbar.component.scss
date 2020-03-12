@@ -46,6 +46,12 @@ img {
     text-align: center;
 }
 
+.collection-item {
+    span {
+        color: #64b5f6 !important;
+    }
+}
+
 .material-icons {
     color: #64b5f6 !important;
     cursor: pointer;
@@ -53,6 +59,7 @@ img {
 
 .secondary-content {
     margin-top: -5px !important;
+    color: #64b5f6;
 }
 
 .markAll {
@@ -62,6 +69,10 @@ img {
 
 .material-icons {
     color: #fff !important;
+}
+
+.dropdown-button {
+    margin-left: 20px !important;
 }
 
 .dropdown-content {

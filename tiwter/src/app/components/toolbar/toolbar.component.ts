@@ -17,6 +17,8 @@ export class ToolbarComponent implements OnInit {
   notifications = [];
   socket: any;
   count = [];
+  chatList = [];
+  msgNumber = 0;
 
   constructor(private tokenService: TokenService, private router: Router, private usersService: UsersService) {
     this.socket = io('http://localhost:3000');
@@ -25,8 +27,15 @@ export class ToolbarComponent implements OnInit {
   ngOnInit() {
     this.user = this.tokenService.GetPayload();
 
-    const dropDownElement = document.querySelector('.dropdown-trigger');
+    const dropDownElement = document.querySelectorAll('.dropdown-trigger');
     M.Dropdown.init(dropDownElement, {
+      alignment: 'right',
+      hover: true,
+      coverTrigger: false
+    });
+
+    const dropDownElementTwo = document.querySelectorAll('.dropdown-trigger1');
+    M.Dropdown.init(dropDownElementTwo, {
       alignment: 'right',
       hover: true,
       coverTrigger: false
@@ -44,6 +53,8 @@ export class ToolbarComponent implements OnInit {
         this.notifications = data.result.notifications.reverse();
         const value = _.filter(this.notifications, ['read', false]);
         this.count = value;
+        this.chatList = data.result.chatList;
+        this.CheckIfRead(this.chatList);
       },
       err => {
         if (err.error.token === null) {
@@ -52,6 +63,19 @@ export class ToolbarComponent implements OnInit {
         }
       }
     );
+  }
+
+  CheckIfRead(arr) {
+    const checkArr = [];
+    for (let i = 0; i < arr.length; i++) {
+      const receiver = arr[i].msgId.message[arr[i].mgsId.message.length - 1];
+      if (this.router.url !== `/chat/${receiver.sendername}`) {
+        if (receiver.isRead === false && receiver.receivername === this.user.username) {
+          checkArr.push(1);
+          this.msgNumber = _.sum(checkArr);
+        }
+      }
+    }
   }
 
   MarkAll() {
@@ -71,5 +95,14 @@ export class ToolbarComponent implements OnInit {
 
   TimeFromNow(time) {
     return moment(time).fromNow();
+  }
+
+  MessageDate(date) {
+    return moment(date).calendar(null, {
+      sameDay: '[Today]',
+      lastDay: '[Yesterday]',
+      lastWeek: 'DD/MM/YYYY',
+      sameElse: 'DD/MM/YYYY'
+    })
   }
 }

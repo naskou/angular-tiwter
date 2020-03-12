@@ -21,7 +21,7 @@
     <div class="row">
       <div class="col s12">
         <div class="message-wrapper" *ngFor="let message of messagesArray">
-          <div class="left" *ngIf="user.username !== receiver && user.username !== message.sendername">
+          <div class="left" *ngIf="user.username !== receiver">
             <div class="chat-bubble left slide-left">
               <div class="message">{{ message.body }}</div>
             </div>
