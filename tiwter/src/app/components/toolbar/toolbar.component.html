@@ -5,13 +5,13 @@
       <ul id="nav-mobile" class="right hide-on-med-and-down">
         <li class="dropdown-button dropdown-trigger" data-target="dropdown">
           <i class="material-icons">explore</i>
-          <span class="badge" *ngIf="count.length > 0">{{count.length}}</span>
+          <span class="badge" *ngIf="count.length > 0">{{ count.length }}</span>
           <!-- <span class="nav-label-icon">2</span> -->
           <ul id="dropdown" class="dropdown-content col s12 collection">
             <li class="collection-item avatar" *ngFor="let data of notifications">
-              <img src="http://placehold.it/50x50" class="circle" alt="">
-              <span [ngClass]="data.read ? 'isRead' : 'unread'">{{data.message}}</span>
-              <p class="time">{{TimeFromNow(data.created)}}</p>
+              <img src="http://placehold.it/50x50" class="circle" alt="" />
+              <span [ngClass]="data.read ? 'isRead' : 'unread'">{{ data.message }}</span>
+              <p class="time">{{ TimeFromNow(data.created) }}</p>
             </li>
             <li *ngIf="notifications.length <= 0">
               <p class="text">No notifications</p>
@@ -21,23 +21,30 @@
             </p>
           </ul>
         </li>
-        <li>
-        </li>
+        <li></li>
         <li class="dropdown-button dropdown-trigger1" data-target="dropdown1">
           <i class="material-icons">chat_bubble</i>
-          <span class="badge" *ngIf="msgNumber > 0">{{msgNumber}}</span>
+          <span class="badge" *ngIf="msgNumber > 0">{{ msgNumber }}</span>
           <ul id="dropdown1" class="dropdown-content col s12 collection">
-            <li class="collection-item avatar" *ngFor="let chat of chatList" [routerLink]="['/chat', chat.receiverId.username]">
-              <img src="http://placehold.it/50x50" class="circle" alt="">
+            <li
+              class="collection-item avatar"
+              *ngFor="let chat of chatList"
+              (click)="GoToChatPage(chat.receiverId.username)"
+            >
+              <img src="http://placehold.it/50x50" class="circle" />
               <span class="title">
-                {{chat.receiverId.username}}
+                {{ chat.receiverId.username }}
                 <a class="secondary-content">
-                  {{MessageDate(chat.msgId.message[chat.msgId.message.length - 1].createdAt)}}
+                  {{ MessageDate(chat.msgId.message[chat.msgId.message.length - 1].createdAt) }}
                 </a>
               </span>
               <p>
-                {{chat.msgId.message[chat.msgId.message.length - 1].body}}
-                <a class="secondary-content" *ngIf="chat.msgId.message[chat.msgId.message.length - 1].isRead">
+                {{ chat.msgId.message[chat.msgId.message.length - 1].body }}
+                <a
+                  class="secondary-content"
+                  *ngIf="
+                    chat.msgId.message[chat.msgId.message.length - 1].isRead &&
+                    chat.receiverId.username !== chat.msgId.message[chat.msgId.message.length - 1].receivername">
                   <i class="material-icons">brightness_1</i>
                 </a>
                 <a class="secondary-content" *ngIf="chat.msgId.message[chat.msgId.message.length - 1].isRead">
@@ -49,7 +56,7 @@
               <p class="text">No notifications</p>
             </li>
             <p class="secondary-content">
-              <a class="markAll btn" (click)="MarkAll()">Mark all as read</a>
+              <a class="markAll btn" (click)="MarkAllMessages()">Mark all as read</a>
             </p>
           </ul>
         </li>

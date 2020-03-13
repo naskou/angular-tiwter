@@ -55,7 +55,7 @@ module.exports = {
       },
       async (err, result) => {
         if (result.length > 0) {
-          const msg = await Message.findOne({conversationId: result[0]._id});
+          const msg = await Message.findOne({ conversationId: result[0]._id });
           Helper.updateChatList(req, msg);
           await Message.update(
             {
@@ -155,5 +155,65 @@ module.exports = {
         }
       }
     );
+  },
+
+  async MarkReceiverMessages(req, res) {
+    const { sender, receiver } = req.params;
+    const msg = await Message.aggregate([
+      { $unwind: $message },
+      {
+        $match: {
+          $and: [
+            { 'message.sendername': receiver, 'message.receivername': sender }
+          ]
+        }
+      }
+    ]);
+
+    if (msg.length > 0) {
+      try {
+        msg.forEach(async value => {
+          await Message.update(
+            {
+              'message._id': value.message._id
+            },
+            { $set: { 'message.$.isRead': true } }
+          );
+        });
+        res.status(HttpStatus.OK).json({ message: 'Messages marked as read' });
+      } catch (err) {
+        res
+          .status(HttpStatus.INTERNAL_SERVER_ERROR)
+          .json({ message: 'Error occured' });
+      }
+    }
+  },
+
+  async MarkAllMessages(req, res) {
+    const msg = await Message.aggregate([
+      { $match: { 'message.receivername': req.user.username } },
+      { $unwind: '$message' },
+      { $match: { 'message.receivername': req.user, username } }
+    ]);
+
+    if (msg.length > 0) {
+      try {
+        msg.forEach(async value => {
+          await Message.update(
+            {
+              'message._id': value.message._id
+            },
+            { $set: { 'message.$.isRead': true } }
+          );
+        });
+        res
+          .status(HttpStatus.OK)
+          .json({ message: 'All messages marked as read' });
+      } catch (err) {
+        res
+          .status(HttpStatus.INTERNAL_SERVER_ERROR)
+          .json({ message: 'Error occured' });
+      }
+    }
   }
 };

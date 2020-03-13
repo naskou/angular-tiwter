@@ -6,6 +6,7 @@ import { UsersService } from 'src/app/services/users.service';
 import * as moment from 'moment';
 import _ from 'lodash';
 import io from 'socket.io-client';
+import { MessageService } from 'src/app/services/message.service';
 
 @Component({
   selector: 'app-toolbar',
@@ -20,7 +21,12 @@ export class ToolbarComponent implements OnInit {
   chatList = [];
   msgNumber = 0;
 
-  constructor(private tokenService: TokenService, private router: Router, private usersService: UsersService) {
+  constructor(
+    private tokenService: TokenService,
+    private router: Router,
+    private usersService: UsersService,
+    private msgService: MessageService
+  ) {
     this.socket = io('http://localhost:3000');
   }
 
@@ -93,6 +99,19 @@ export class ToolbarComponent implements OnInit {
     this.router.navigate(['streams']);
   }
 
+  GoToChatPage() {
+    this.router.navigate(['chat', name]);
+    this.msgService.MarkMessages(this.user.username, name).subscribe(data => {
+      this.socket.emit('refresh', {})
+    })
+  }
+
+  MarkAllMessages(){
+    this.msgService.MarkAllMessages().subscribe(data => {
+      this.socket.emit('refresh', {})
+    })
+  }
+
   TimeFromNow(time) {
     return moment(time).fromNow();
   }
@@ -103,6 +122,6 @@ export class ToolbarComponent implements OnInit {
       lastDay: '[Yesterday]',
       lastWeek: 'DD/MM/YYYY',
       sameElse: 'DD/MM/YYYY'
-    })
+    });
   }
 }
