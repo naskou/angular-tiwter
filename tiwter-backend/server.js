@@ -23,6 +23,7 @@ const posts = require('./routes/postRoutes');
 const users = require('./routes/userRoutes');
 const friends = require('./routes/friendsRoutes');
 const message = require('./routes/messageRoutes');
+const image = require('./routes/imageRoutes');
 
 // app.use((req, res, next) => {
 //   res.header('Access-Control-Allow-Origin', '*');
@@ -58,6 +59,7 @@ app.use('/api/tiwter', posts);
 app.use('/api/tiwter', users);
 app.use('/api/tiwter', friends);
 app.use('/api/tiwter', message);
+app.use('/api/tiwter', image);
 
 
 server.listen(3000, () => {
