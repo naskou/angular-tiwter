@@ -1,17 +1,19 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, Input, OnChanges, SimpleChange, SimpleChanges } from '@angular/core';
 import { TokenService } from 'src/app/services/token.service';
 import { MessageService } from 'src/app/services/message.service';
 import { ActivatedRoute } from '@angular/router';
 import { UsersService } from 'src/app/services/users.service';
 import io from 'socket.io-client';
 import { CaretEvent, EmojiEvent } from 'ng2-emoji-picker';
+import _ from 'lodash';
 
 @Component({
   selector: 'app-message',
   templateUrl: './message.component.html',
   styleUrls: ['./message.component.scss']
 })
-export class MessageComponent implements OnInit, AfterViewInit {
+export class MessageComponent implements OnInit, AfterViewInit, OnChanges {
+  @Input() users;
   receiver: String;
   user: any;
   message: string;
@@ -20,6 +22,7 @@ export class MessageComponent implements OnInit, AfterViewInit {
   socket: any;
   typingMessage;
   typing: boolean;
+  isOnline: boolean;
 
   public eventMock;
   public eventPosMock;
@@ -62,6 +65,18 @@ export class MessageComponent implements OnInit, AfterViewInit {
         this.typing = false;
       }
     });
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.users.currentValue.length > 0) {
+      const result = _.indexOf(changes.users.currentValue, this.receiver);
+
+      if (result > -1) {
+        this.isOnline = true;
+      } else {
+        this.isOnline = false;
+      }
+    }
   }
 
   ngAfterViewInit() {

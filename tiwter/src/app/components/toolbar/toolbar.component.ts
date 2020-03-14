@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, Output, EventEmitter } from '@angular/core';
 import { TokenService } from './../../services/token.service';
 import { Router } from '@angular/router';
 import * as M from 'materialize-css';
@@ -13,7 +13,8 @@ import { MessageService } from 'src/app/services/message.service';
   templateUrl: './toolbar.component.html',
   styleUrls: ['./toolbar.component.scss']
 })
-export class ToolbarComponent implements OnInit {
+export class ToolbarComponent implements OnInit, AfterViewInit {
+  @Output() onlineUsers = new EventEmitter();
   user: any;
   notifications = [];
   socket: any;
@@ -47,9 +48,17 @@ export class ToolbarComponent implements OnInit {
       coverTrigger: false
     });
 
+    this.socket.emit('online', { room: 'global', user: this.user.username });
+
     this.GetUser();
     this.socket.on('refreshPage', () => {
       this.GetUser();
+    });
+  }
+
+  ngAfterViewInit() {
+    this.socket.on('usersOnline', data => {
+      this.onlineUsers.emit(data);
     });
   }
 
@@ -102,14 +111,15 @@ export class ToolbarComponent implements OnInit {
   GoToChatPage() {
     this.router.navigate(['chat', name]);
     this.msgService.MarkMessages(this.user.username, name).subscribe(data => {
-      this.socket.emit('refresh', {})
-    })
+      this.socket.emit('refresh', {});
+    });
   }
 
-  MarkAllMessages(){
+  MarkAllMessages() {
     this.msgService.MarkAllMessages().subscribe(data => {
-      this.socket.emit('refresh', {})
-    })
+      this.socket.emit('refresh', {});
+      this.msgNumber = 0;
+    });
   }
 
   TimeFromNow(time) {
