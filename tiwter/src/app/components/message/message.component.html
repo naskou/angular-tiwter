@@ -4,7 +4,7 @@
       <div class="card">
         <div class="valign-wrapper" style="background: #64b5f6 !important;">
           <div class="col s12 imgCol">
-            <img src="http://placehold.it/50x50" class="circle" alt="" />
+            <img src="https://res.cloudinary.com/dsvv0x4oc/image/upload/v{{receiverData.picVersion}}/{{receiverData.picId}}" class="imgCircle" alt="" />
           </div>
           <div class="row">
             <div class="col s10 nameCol">
@@ -28,7 +28,7 @@
             </div>
           </div>
 
-          <div class="right" *ngIf="usernusername === message.sendername">
+          <div class="right" *ngIf="user.username === message.sendername">
             <div class="chat-bubble right slide-right">
               <div class="message">{{ message.body }}</div>
             </div>

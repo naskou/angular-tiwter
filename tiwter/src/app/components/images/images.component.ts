@@ -1,6 +1,8 @@
 import { FileUploader } from 'ng2-file-upload';
 import { Component, OnInit } from '@angular/core';
 import { UsersService } from 'src/app/services/users.service';
+import { TokenService } from 'src/app/services/token.service';
+import io from 'socket.io-client';
 
 const URL = 'http://localhost:3000/api/tiwter/upload-image';
 
@@ -14,12 +16,32 @@ export class ImagesComponent implements OnInit {
     url: URL,
     disableMultipart: true
   });
-
+  user: any;
   selectedFile: any;
+  images = [];
 
-  constructor(private usersService: UsersService) {}
+  socket: any;
 
-  ngOnInit() {}
+  constructor(private usersService: UsersService, private tokenService: TokenService) {
+    this.socket = io('http://localhost:3000');
+  }
+
+  ngOnInit() {
+    this.user = this.tokenService.GetPayload();
+
+    this.socket.on('refreshPage', () => {
+      this.GetUser();
+    });
+  }
+
+  GetUser() {
+    this.usersService.GetUserById(this.user._id).subscribe(
+      data => {
+        this.images = data.result.images;
+      },
+      err => console.log(err)
+    );
+  }
 
   OnFileSelected(event) {
     const file: File = event[0];
@@ -35,12 +57,22 @@ export class ImagesComponent implements OnInit {
     if (this.selectedFile) {
       this.usersService.AddImage(this.selectedFile).subscribe(
         data => {
+          this.socket.emit('refresh', {});
           const filePath = <HTMLInputElement>document.getElementById('filePath');
           filePath.value = '';
         },
         err => console.log(err)
       );
     }
+  }
+
+  SetProfileImage(image) {
+    this.usersService.SetDefaultImage(image.imgId, image.imgVersion).subscribe(
+      data => {
+        this.socket.emit('refresh', {});
+      },
+      err => console.log(err)
+    );
   }
 
   ReadAsBase64(file): Promise<any> {
