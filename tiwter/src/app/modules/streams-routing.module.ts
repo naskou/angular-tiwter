@@ -9,6 +9,7 @@ import { FollowersComponent } from '../components/followers/followers.component'
 import { NotificationsComponent } from '../components/notifications/notifications.component';
 import { ChatComponent } from '../components/chat/chat.component';
 import { ImagesComponent } from '../components/images/images.component';
+import { ViewUserComponent } from '../components/view-user/view-user.component';
 
 const routes: Routes = [
   {
@@ -52,13 +53,18 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   },
   {
+    path: ':name',
+    component: ViewUserComponent,
+    canActivate: [AuthGuard]
+  },
+  {
     path: '**',
     redirectTo: 'streams'
   }
 ];
- 
+
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
-export class StreamsRoutingModule { }
+export class StreamsRoutingModule {}
